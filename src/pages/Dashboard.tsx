@@ -1,40 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { NamePicker } from "@/components/NamePicker";
 import { SessionSetup } from "@/components/SessionSetup";
-import { useAuth } from "@/hooks/use-auth";
 import { Id } from "@/convex/_generated/dataModel";
 import { motion } from "framer-motion";
-import { Loader2, LogOut, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Sparkles, History } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function Dashboard() {
-  const { isLoading, isAuthenticated, user, signOut } = useAuth();
   const navigate = useNavigate();
   const [currentSession, setCurrentSession] = useState<Id<"drawSessions"> | null>(null);
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate("/auth");
-    }
-  }, [isLoading, isAuthenticated, navigate]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-[#00ff88]" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated || !user) {
-    return null;
-  }
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/");
-  };
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -53,19 +28,14 @@ export default function Dashboard() {
               Delux MU Roller
             </h1>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-white/70 hidden sm:inline">
-              {user.email || "Guest User"}
-            </span>
-            <Button
-              variant="outline"
-              onClick={handleSignOut}
-              className="border-[#ff0080]/30 hover:border-[#ff0080] hover:bg-[#ff0080]/10"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            onClick={() => navigate("/history")}
+            className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10"
+          >
+            <History className="h-4 w-4 mr-2" />
+            Roll History
+          </Button>
         </div>
       </motion.header>
 

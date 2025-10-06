@@ -20,6 +20,7 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
   const session = useQuery(api.draws.getSession, { sessionId });
   const performDraw = useMutation(api.draws.performDraw);
   const resetCooldowns = useMutation(api.draws.resetCooldowns);
+  const globalCooldowns = useQuery(api.draws.getGlobalCooldowns);
   
   const [drawing, setDrawing] = useState(false);
   const [currentWinner, setCurrentWinner] = useState<{ winner: string; item: string } | null>(null);
@@ -80,6 +81,13 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
     const cooldownEnd = session.cooldowns[name] || 0;
     const remaining = Math.max(0, cooldownEnd - currentTime);
     return Math.ceil(remaining / 1000);
+  };
+
+  const getGlobalCooldownForName = (name: string, itemName: string) => {
+    if (!globalCooldowns) return null;
+    return globalCooldowns.find(
+      gc => gc.participantName === name && gc.itemName === itemName && gc.cooldownEnd > currentTime
+    );
   };
 
   const availableNames = getAvailableNames();

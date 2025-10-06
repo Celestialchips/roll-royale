@@ -1,20 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/hooks/use-auth";
 import { motion } from "framer-motion";
-import { Sparkles, Zap, Clock, Trophy, ArrowRight, Loader2 } from "lucide-react";
+import { Sparkles, Zap, Clock, Trophy, ArrowRight, History } from "lucide-react";
 import { useNavigate } from "react-router";
 
 export default function Landing() {
-  const { isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
-  const handleGetStarted = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    } else {
-      navigate("/auth");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
@@ -40,19 +30,22 @@ export default function Landing() {
               Delux MU Roller
             </h1>
           </div>
-          <Button
-            onClick={handleGetStarted}
-            disabled={isLoading}
-            className="bg-gradient-to-r from-[#00ff88] to-[#0088ff] hover:shadow-[0_0_20px_rgba(0,255,136,0.5)] transition-all"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : isAuthenticated ? (
-              "Dashboard"
-            ) : (
-              "Get Started"
-            )}
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => navigate("/history")}
+              variant="outline"
+              className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10"
+            >
+              <History className="h-4 w-4 mr-2" />
+              Roll History
+            </Button>
+            <Button
+              onClick={() => navigate("/dashboard")}
+              className="bg-gradient-to-r from-[#00ff88] to-[#0088ff] hover:shadow-[0_0_20px_rgba(0,255,136,0.5)] transition-all"
+            >
+              Get Started
+            </Button>
+          </div>
         </div>
       </motion.header>
 
@@ -94,19 +87,12 @@ export default function Landing() {
             transition={{ delay: 0.4 }}
           >
             <Button
-              onClick={handleGetStarted}
-              disabled={isLoading}
+              onClick={() => navigate("/dashboard")}
               size="lg"
               className="text-lg px-8 py-6 bg-gradient-to-r from-[#00ff88] to-[#0088ff] hover:shadow-[0_0_30px_rgba(0,255,136,0.5)] transition-all"
             >
-              {isLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin mr-2" />
-              ) : (
-                <>
-                  Start Drawing
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </>
-              )}
+              Start Drawing
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </motion.div>
         </div>
@@ -191,19 +177,12 @@ export default function Landing() {
             Create your first draw session in seconds
           </p>
           <Button
-            onClick={handleGetStarted}
-            disabled={isLoading}
+            onClick={() => navigate("/dashboard")}
             size="lg"
             className="text-lg px-8 py-6 bg-gradient-to-r from-[#00ff88] via-[#0088ff] to-[#ff0080] hover:shadow-[0_0_30px_rgba(0,255,136,0.5)] transition-all"
           >
-            {isLoading ? (
-              <Loader2 className="h-5 w-5 animate-spin mr-2" />
-            ) : (
-              <>
-                Get Started Free
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </>
-            )}
+            Get Started Free
+            <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </motion.div>
       </section>

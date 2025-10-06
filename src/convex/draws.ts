@@ -1,8 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { getCurrentUser } from "./users";
 
-// Create a new draw session
+// Create a new draw session (no auth required)
 export const createSession = mutation({
   args: {
     names: v.array(v.string()),
@@ -12,13 +11,7 @@ export const createSession = mutation({
     })),
   },
   handler: async (ctx, args) => {
-    const user = await getCurrentUser(ctx);
-    if (!user) {
-      throw new Error("Not authenticated");
-    }
-
     const sessionId = await ctx.db.insert("drawSessions", {
-      userId: user._id,
       names: args.names,
       items: args.items,
       cooldowns: {},
@@ -29,42 +22,39 @@ export const createSession = mutation({
   },
 });
 
-// Get user's sessions
-export const getUserSessions = query({
-  args: {},
-  handler: async (ctx) => {
-    const user = await getCurrentUser(ctx);
-    if (!user) {
-      return [];
-    }
-
-    return await ctx.db
-      .query("drawSessions")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
-      .order("desc")
-      .collect();
-  },
-});
-
-// Get a specific session
+// Get a specific session (public access)
 export const getSession = query({
   args: { sessionId: v.id("drawSessions") },
   handler: async (ctx, args) => {
-    const session = await ctx.db.get(args.sessionId);
-    if (!session) {
-      return null;
-    }
-
-    const user = await getCurrentUser(ctx);
-    if (!user || session.userId !== user._id) {
-      return null;
-    }
-
-    return session;
+    return await ctx.db.get(args.sessionId);
   },
 });
 
-// Perform a draw
+// Get global history of all rolls
+export const getGlobalHistory = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db
+      .query("globalHistory")
+      .withIndex("by_timestamp")
+      .order("desc")
+      .take(100);
+  },
+});
+
+// Get active global cooldowns
+export const getGlobalCooldowns = query({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now();
+    const allCooldowns = await ctx.db.query("globalCooldowns").collect();
+    
+    // Filter to only active cooldowns
+    return allCooldowns.filter(cd => cd.cooldownEnd > now);
+  },
+});
+
+// Perform a draw with global cooldown tracking
 export const performDraw = mutation({
   args: {
     sessionId: v.id("drawSessions"),
@@ -76,21 +66,31 @@ export const performDraw = mutation({
       throw new Error("Session not found");
     }
 
-    const user = await getCurrentUser(ctx);
-    if (!user || session.userId !== user._id) {
-      throw new Error("Unauthorized");
-    }
-
     const item = session.items[args.itemIndex];
     if (!item) {
       throw new Error("Item not found");
     }
 
-    // Filter out names on cooldown
     const now = Date.now();
+
+    // Check both session cooldowns AND global cooldowns
+    const globalCooldowns = await ctx.db
+      .query("globalCooldowns")
+      .withIndex("by_itemName", (q) => q.eq("itemName", item.name))
+      .collect();
+
     const availableNames = session.names.filter((name) => {
-      const cooldownEnd = session.cooldowns[name] || 0;
-      return cooldownEnd <= now;
+      // Check session cooldown
+      const sessionCooldownEnd = session.cooldowns[name] || 0;
+      if (sessionCooldownEnd > now) {
+        return false;
+      }
+
+      // Check global cooldown for this item name
+      const globalCooldown = globalCooldowns.find(
+        gc => gc.participantName === name && gc.cooldownEnd > now
+      );
+      return !globalCooldown;
     });
 
     if (availableNames.length === 0) {
@@ -100,11 +100,11 @@ export const performDraw = mutation({
     // Pick random name
     const winner = availableNames[Math.floor(Math.random() * availableNames.length)];
 
-    // Update cooldown
+    // Update session cooldown
     const newCooldowns = { ...session.cooldowns };
     newCooldowns[winner] = now + item.cooldown * 1000;
 
-    // Add to history
+    // Add to session history
     const newHistory = [
       ...session.history,
       {
@@ -120,40 +120,46 @@ export const performDraw = mutation({
       history: newHistory,
     });
 
+    // Update or create global cooldown
+    const existingGlobalCooldown = await ctx.db
+      .query("globalCooldowns")
+      .withIndex("by_itemName_and_participantName", (q) => 
+        q.eq("itemName", item.name).eq("participantName", winner)
+      )
+      .first();
+
+    if (existingGlobalCooldown) {
+      await ctx.db.patch(existingGlobalCooldown._id, {
+        cooldownEnd: now + item.cooldown * 1000,
+      });
+    } else {
+      await ctx.db.insert("globalCooldowns", {
+        itemName: item.name,
+        participantName: winner,
+        cooldownEnd: now + item.cooldown * 1000,
+      });
+    }
+
+    // Add to global history
+    await ctx.db.insert("globalHistory", {
+      itemName: item.name,
+      winner,
+      timestamp: now,
+      cooldownDuration: item.cooldown,
+      sessionId: args.sessionId,
+    });
+
     return { winner, item: item.name };
   },
 });
 
-// Delete a session
-export const deleteSession = mutation({
-  args: { sessionId: v.id("drawSessions") },
-  handler: async (ctx, args) => {
-    const session = await ctx.db.get(args.sessionId);
-    if (!session) {
-      throw new Error("Session not found");
-    }
-
-    const user = await getCurrentUser(ctx);
-    if (!user || session.userId !== user._id) {
-      throw new Error("Unauthorized");
-    }
-
-    await ctx.db.delete(args.sessionId);
-  },
-});
-
-// Reset cooldowns
+// Reset session cooldowns only (not global)
 export const resetCooldowns = mutation({
   args: { sessionId: v.id("drawSessions") },
   handler: async (ctx, args) => {
     const session = await ctx.db.get(args.sessionId);
     if (!session) {
       throw new Error("Session not found");
-    }
-
-    const user = await getCurrentUser(ctx);
-    if (!user || session.userId !== user._id) {
-      throw new Error("Unauthorized");
     }
 
     await ctx.db.patch(args.sessionId, {

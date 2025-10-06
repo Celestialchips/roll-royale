@@ -1,39 +1,13 @@
 import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
-import { Infer, v } from "convex/values";
-
-// default user roles. can add / remove based on the project as needed
-export const ROLES = {
-  ADMIN: "admin",
-  USER: "user",
-  MEMBER: "member",
-} as const;
-
-export const roleValidator = v.union(
-  v.literal(ROLES.ADMIN),
-  v.literal(ROLES.USER),
-  v.literal(ROLES.MEMBER),
-);
-export type Role = Infer<typeof roleValidator>;
+import { v } from "convex/values";
 
 const schema = defineSchema(
   {
-    // default auth tables using convex auth.
-    ...authTables, // do not remove or modify
-
-    // the users table is the default users table that is brought in by the authTables
-    users: defineTable({
-      name: v.optional(v.string()), // name of the user. do not remove
-      image: v.optional(v.string()), // image of the user. do not remove
-      email: v.optional(v.string()), // email of the user. do not remove
-      emailVerificationTime: v.optional(v.number()), // email verification time. do not remove
-      isAnonymous: v.optional(v.boolean()), // is the user anonymous. do not remove
-
-      role: v.optional(roleValidator), // role of the user. do not remove
-    }).index("email", ["email"]), // index for the email. do not remove or modify
+    // Keep auth tables for compatibility but won't be used
+    ...authTables,
 
     drawSessions: defineTable({
-      userId: v.id("users"),
       names: v.array(v.string()),
       items: v.array(v.object({
         name: v.string(),
@@ -46,7 +20,29 @@ const schema = defineSchema(
         timestamp: v.number(),
         cooldownDuration: v.number(),
       })),
-    }).index("by_userId", ["userId"]),
+    }),
+
+    // Global cooldowns tracked by item name
+    globalCooldowns: defineTable({
+      itemName: v.string(),
+      participantName: v.string(),
+      cooldownEnd: v.number(),
+    })
+      .index("by_itemName", ["itemName"])
+      .index("by_participantName", ["participantName"])
+      .index("by_itemName_and_participantName", ["itemName", "participantName"]),
+
+    // Global history of all rolls
+    globalHistory: defineTable({
+      itemName: v.string(),
+      winner: v.string(),
+      timestamp: v.number(),
+      cooldownDuration: v.number(),
+      sessionId: v.id("drawSessions"),
+    })
+      .index("by_timestamp", ["timestamp"])
+      .index("by_itemName", ["itemName"])
+      .index("by_winner", ["winner"]),
   },
   {
     schemaValidation: false,
