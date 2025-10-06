@@ -265,7 +265,7 @@ export const VlyToolbar: React.FC = () => {
     window.self === window.top;
 
   React.useEffect(() => {
-    injectHighlightStyle();
+    // injectHighlightStyle();
   }, []);
 
   // Listen for postMessage from parent to enable/disable select mode

@@ -190,7 +190,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/10 bg-[#111111]/50 backdrop-blur-sm py-8">
         <div className="container mx-auto px-4 text-center text-white/50">
-          <p>Built with ❤️ using Convex & React</p>
+          <p>Built with ❤️ by Chippia for Delux Dark Epoch: MU</p>
         </div>
       </footer>
     </div>
