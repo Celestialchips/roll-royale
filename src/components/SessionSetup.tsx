@@ -17,7 +17,7 @@ interface SessionSetupProps {
 export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
   const [names, setNames] = useState<string[]>([""]);
   const [items, setItems] = useState<{ name: string; cooldown: number }[]>([
-    { name: "", cooldown: 60 },
+    { name: "", cooldown: 24 },
   ]);
   const [creating, setCreating] = useState(false);
 
@@ -38,7 +38,7 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
   };
 
   const addItem = () => {
-    setItems([...items, { name: "", cooldown: 60 }]);
+    setItems([...items, { name: "", cooldown: 24 }]);
   };
 
   const removeItem = (index: number) => {
@@ -173,7 +173,7 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
                   )}
                 </div>
                 <div>
-                  <Label className="text-white/70 text-xs">Cooldown (seconds)</Label>
+                  <Label className="text-white/70 text-xs">Cooldown (hours)</Label>
                   <Input
                     type="number"
                     value={item.cooldown}

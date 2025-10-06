@@ -100,9 +100,9 @@ export const performDraw = mutation({
     // Pick random name
     const winner = availableNames[Math.floor(Math.random() * availableNames.length)];
 
-    // Update session cooldown
+    // Update session cooldown (convert hours to milliseconds)
     const newCooldowns = { ...session.cooldowns };
-    newCooldowns[winner] = now + item.cooldown * 1000;
+    newCooldowns[winner] = now + item.cooldown * 60 * 60 * 1000;
 
     // Add to session history
     const newHistory = [
@@ -120,7 +120,7 @@ export const performDraw = mutation({
       history: newHistory,
     });
 
-    // Update or create global cooldown
+    // Update or create global cooldown (convert hours to milliseconds)
     const existingGlobalCooldown = await ctx.db
       .query("globalCooldowns")
       .withIndex("by_itemName_and_participantName", (q) => 
@@ -130,13 +130,13 @@ export const performDraw = mutation({
 
     if (existingGlobalCooldown) {
       await ctx.db.patch(existingGlobalCooldown._id, {
-        cooldownEnd: now + item.cooldown * 1000,
+        cooldownEnd: now + item.cooldown * 60 * 60 * 1000,
       });
     } else {
       await ctx.db.insert("globalCooldowns", {
         itemName: item.name,
         participantName: winner,
-        cooldownEnd: now + item.cooldown * 1000,
+        cooldownEnd: now + item.cooldown * 60 * 60 * 1000,
       });
     }
 

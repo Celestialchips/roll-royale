@@ -23,7 +23,10 @@ export default function History() {
 
   const getRemainingCooldown = (cooldownEnd: number) => {
     const remaining = Math.max(0, cooldownEnd - currentTime);
-    return Math.ceil(remaining / 1000);
+    const hours = Math.floor(remaining / (1000 * 60 * 60));
+    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    const totalSeconds = Math.ceil(remaining / 1000);
+    return { hours, minutes, totalSeconds };
   };
 
   return (
@@ -92,7 +95,7 @@ export default function History() {
                               </div>
                               <div className="flex items-center gap-1 text-[#ff0080]">
                                 <Clock className="h-4 w-4" />
-                                <span className="font-mono font-bold">{remaining}s</span>
+                                <span className="font-mono font-bold">{remaining.hours}h {remaining.minutes}m</span>
                               </div>
                             </div>
                             <div className="w-full bg-[#111111] rounded-full h-2 overflow-hidden">
@@ -100,7 +103,7 @@ export default function History() {
                                 className="h-full bg-gradient-to-r from-[#ff0080] to-[#ff0080]/50"
                                 initial={{ width: "100%" }}
                                 animate={{ width: "0%" }}
-                                transition={{ duration: remaining, ease: "linear" }}
+                                transition={{ duration: remaining.totalSeconds, ease: "linear" }}
                               />
                             </div>
                           </motion.div>
@@ -152,7 +155,7 @@ export default function History() {
                                   <span className="text-[#0088ff] font-bold">{entry.itemName}</span>
                                 </p>
                                 <p className="text-white/50 text-sm">
-                                  Cooldown: {entry.cooldownDuration}s
+                                  Cooldown: {entry.cooldownDuration}h
                                 </p>
                               </div>
                             </div>

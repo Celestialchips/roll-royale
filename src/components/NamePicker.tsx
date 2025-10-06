@@ -80,7 +80,9 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
   const getRemainingCooldown = (name: string) => {
     const cooldownEnd = session.cooldowns[name] || 0;
     const remaining = Math.max(0, cooldownEnd - currentTime);
-    return Math.ceil(remaining / 1000);
+    const hours = Math.floor(remaining / (1000 * 60 * 60));
+    const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+    return { hours, minutes, totalSeconds: Math.ceil(remaining / 1000) };
   };
 
   const getGlobalCooldownForName = (name: string, itemName: string) => {
@@ -127,7 +129,7 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
               <div className="space-y-2">
                 {session.names.map((name, index) => {
                   const cooldown = getRemainingCooldown(name);
-                  const isOnCooldown = cooldown > 0;
+                  const isOnCooldown = cooldown.totalSeconds > 0;
                   
                   return (
                     <motion.div
@@ -145,7 +147,7 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
                       {isOnCooldown && (
                         <div className="flex items-center gap-2 text-[#ff0080] text-sm">
                           <Clock className="h-4 w-4" />
-                          {cooldown}s
+                          {cooldown.hours}h {cooldown.minutes}m
                         </div>
                       )}
                     </motion.div>
@@ -179,7 +181,7 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
                         <div className="flex items-center justify-between mb-3">
                           <h3 className="text-white font-bold text-lg">{item.name}</h3>
                           <span className="text-[#0088ff] text-sm">
-                            {item.cooldown}s cooldown
+                            {item.cooldown}h cooldown
                           </span>
                         </div>
                         <Button
@@ -262,6 +264,7 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
                       <span className="text-[#00ff88] font-bold">{entry.winner}</span>
                       <span className="text-white/70"> won </span>
                       <span className="text-[#0088ff] font-bold">{entry.itemName}</span>
+                      <span className="text-white/50 text-sm ml-2">({entry.cooldownDuration}h cooldown)</span>
                     </div>
                     <span className="text-white/50 text-sm">
                       {new Date(entry.timestamp).toLocaleTimeString()}
