@@ -50,7 +50,7 @@ export default function Dashboard() {
               <Sparkles className="h-6 w-6 text-black" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00ff88] to-[#0088ff] bg-clip-text text-transparent">
-              Lucky Draw
+              Delux MU Roller
             </h1>
           </div>
           <div className="flex items-center gap-4">

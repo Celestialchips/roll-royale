@@ -37,7 +37,7 @@ export default function Landing() {
               <Sparkles className="h-6 w-6 text-black" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00ff88] to-[#0088ff] bg-clip-text text-transparent">
-              Lucky Draw
+              Delux MU Roller
             </h1>
           </div>
           <Button
@@ -76,7 +76,7 @@ export default function Landing() {
             transition={{ delay: 0.2 }}
             className="text-5xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-[#00ff88] via-[#0088ff] to-[#ff0080] bg-clip-text text-transparent"
           >
-            Random Name Picker
+            Delux MU Random Name Picker
           </motion.h1>
 
           <motion.p
