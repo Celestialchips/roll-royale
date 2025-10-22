@@ -6,8 +6,7 @@
   "homepage": "https://celestialchips.github.io/roll-royale",
   "scripts": {
     "dev": "vite",
-    "predeploy": "tsc -b && vite build",
-    "deploy" : "gh-pages -d dist",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write .",
     "preview": "vite preview"
@@ -47,7 +46,6 @@
     "@react-three/fiber": "^9.1.2",
     "@tailwindcss/vite": "^4.1.8",
     "@types/three": "^0.177.0",
-    "@zumer/snapdom": "^1.7.1",
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

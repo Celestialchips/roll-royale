@@ -11,8 +11,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/roll-royale/",
+  base: "./",
   build: {
-    outDir: "docs",
+    outDir: "dist",
   },
 });

@@ -18,7 +18,6 @@ interface SessionSetupProps {
 // Available audio files in the public folder
 const AUDIO_OPTIONS = [
   { value: "none", label: "No Audio" },
-  { value: "/audio/winner1.wav", label: "Lloyd" },
   { value: "/audio/ahfk.wav", label: "Ahhhh" },
   { value: "/audio/fen.wav", label: "Fenny" },
   { value: "/audio/geno.wav", label: "Genocide" },
