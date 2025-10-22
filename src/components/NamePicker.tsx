@@ -54,12 +54,12 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
         setDrawing(false);
         
         // Play audio if available
-        if (result.audioUrl) {
+        if (result.audioPath) {
           if (audioRef.current) {
             audioRef.current.pause();
             audioRef.current.currentTime = 0;
           }
-          audioRef.current = new Audio(result.audioUrl);
+          audioRef.current = new Audio(result.audioPath);
           audioRef.current.play().catch(err => {
             console.error("Failed to play audio:", err);
           });

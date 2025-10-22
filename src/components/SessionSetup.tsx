@@ -2,18 +2,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { api } from "@/convex/_generated/api";
 import { motion } from "framer-motion";
-import { Plus, Trash2, Sparkles, Loader2 } from "lucide-react";
-import { useState, useRef } from "react";
+import { Plus, Trash2, Sparkles, Loader2, Music } from "lucide-react";
+import { useState } from "react";
 import { useMutation } from "convex/react";
 import { toast } from "sonner";
 import { Id } from "@/convex/_generated/dataModel";
-import { Music } from "lucide-react";
 
 interface SessionSetupProps {
   onSessionCreated: (sessionId: Id<"drawSessions">) => void;
 }
+
+// Available audio files in the public folder
+const AUDIO_OPTIONS = [
+  { value: "none", label: "No Audio" },
+  { value: "/audio/winner1.wav", label: "Winner Sound 1" },
+  { value: "/audio/winner2.wav", label: "Winner Sound 2" },
+  { value: "/audio/winner3.wav", label: "Winner Sound 3" },
+  { value: "/audio/fanfare.wav", label: "Fanfare" },
+  { value: "/audio/celebration.wav", label: "Celebration" },
+];
 
 export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
   const [names, setNames] = useState<string[]>([""]);
@@ -21,9 +31,7 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
     { name: "", cooldown: 24 },
   ]);
   const [creating, setCreating] = useState(false);
-  const [audioFiles, setAudioFiles] = useState<Record<string, File>>({});
-  const [uploadingAudio, setUploadingAudio] = useState<Record<string, boolean>>({});
-  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+  const [audioSelections, setAudioSelections] = useState<Record<string, string>>({});
 
   const createSession = useMutation(api.draws.createSession);
 
@@ -59,19 +67,14 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
     setItems(newItems);
   };
 
-  const handleAudioUpload = async (name: string, file: File) => {
-    if (file.size > 25 * 1024 * 1024) {
-      toast.error("Audio file must be less than 25MB");
-      return;
+  const handleAudioSelection = (name: string, audioPath: string) => {
+    if (audioPath === "none") {
+      const newSelections = { ...audioSelections };
+      delete newSelections[name];
+      setAudioSelections(newSelections);
+    } else {
+      setAudioSelections(prev => ({ ...prev, [name]: audioPath }));
     }
-
-    if (!file.type.startsWith("audio/")) {
-      toast.error("Please upload an audio file");
-      return;
-    }
-
-    setAudioFiles(prev => ({ ...prev, [name]: file }));
-    toast.success(`Audio uploaded for ${name}`);
   };
 
   const handleCreate = async () => {
@@ -90,27 +93,18 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
 
     setCreating(true);
     try {
-      // Upload audio files to Convex storage
-      const uploadedAudioFiles: Record<string, Id<"_storage">> = {};
-      
-      for (const [name, file] of Object.entries(audioFiles)) {
+      // Filter audio selections to only include valid names
+      const validAudioSelections: Record<string, string> = {};
+      for (const [name, audioPath] of Object.entries(audioSelections)) {
         if (validNames.includes(name)) {
-          setUploadingAudio(prev => ({ ...prev, [name]: true }));
-          const storageId = await fetch(`${import.meta.env.VITE_CONVEX_URL}/api/storage/upload`, {
-            method: "POST",
-            headers: { "Content-Type": file.type },
-            body: file,
-          }).then(res => res.json()).then(data => data.storageId);
-          
-          uploadedAudioFiles[name] = storageId;
-          setUploadingAudio(prev => ({ ...prev, [name]: false }));
+          validAudioSelections[name] = audioPath;
         }
       }
 
       const sessionId = await createSession({
         names: validNames,
         items: validItems,
-        audioFiles: Object.keys(uploadedAudioFiles).length > 0 ? uploadedAudioFiles : undefined,
+        audioSelections: Object.keys(validAudioSelections).length > 0 ? validAudioSelections : undefined,
       });
       toast.success("Session created successfully!");
       onSessionCreated(sessionId);
@@ -140,7 +134,7 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
                 transition={{ delay: index * 0.05 }}
                 className="flex gap-2"
               >
-                <div className="flex-1">
+                <div className="flex-1 space-y-2">
                   <Input
                     value={name}
                     onChange={(e) => updateName(index, e.target.value)}
@@ -148,33 +142,26 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
                     className="bg-[#0a0a0a] border-[#00ff88]/30 focus:border-[#00ff88] text-white"
                   />
                   {name.trim() && (
-                    <div className="mt-2">
-                      <input
-                        ref={(el) => { fileInputRefs.current[name] = el; }}
-                        type="file"
-                        accept="audio/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) handleAudioUpload(name, file);
-                        }}
-                        className="hidden"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => fileInputRefs.current[name]?.click()}
-                        className="w-full border-[#00ff88]/20 hover:border-[#00ff88] hover:bg-[#00ff88]/5 text-xs"
-                        disabled={uploadingAudio[name]}
+                    <div>
+                      <Label className="text-white/70 text-xs flex items-center gap-1 mb-1">
+                        <Music className="h-3 w-3" />
+                        Winner Audio (Optional)
+                      </Label>
+                      <Select
+                        value={audioSelections[name] || "none"}
+                        onValueChange={(value) => handleAudioSelection(name, value)}
                       >
-                        <Music className="h-3 w-3 mr-1" />
-                        {audioFiles[name] ? "Change Audio" : "Add Audio (Optional)"}
-                      </Button>
-                      {audioFiles[name] && (
-                        <p className="text-[#00ff88] text-xs mt-1 text-center">
-                          ✓ {audioFiles[name].name}
-                        </p>
-                      )}
+                        <SelectTrigger className="bg-[#0a0a0a] border-[#00ff88]/30 focus:border-[#00ff88] text-white text-xs">
+                          <SelectValue placeholder="Select audio" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {AUDIO_OPTIONS.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
                   )}
                 </div>
