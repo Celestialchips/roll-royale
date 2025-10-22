@@ -20,6 +20,7 @@ const schema = defineSchema(
         timestamp: v.number(),
         cooldownDuration: v.number(),
       })),
+      audioFiles: v.optional(v.record(v.string(), v.id("_storage"))),
     }),
 
     // Global cooldowns tracked by item name

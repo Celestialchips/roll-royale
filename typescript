@@ -1,0 +1,4 @@
+if (!file.type.startsWith("audio/")) {
+  toast.error("Please upload an audio file");
+  return;
+}

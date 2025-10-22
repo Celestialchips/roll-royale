@@ -7,7 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Plus, Trash2, X, Sparkles, Clock, Trophy, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { toast } from "sonner";
 
@@ -23,8 +23,9 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
   const globalCooldowns = useQuery(api.draws.getGlobalCooldowns);
   
   const [drawing, setDrawing] = useState(false);
-  const [currentWinner, setCurrentWinner] = useState<{ winner: string; item: string } | null>(null);
+  const [currentWinner, setCurrentWinner] = useState<{ winner: string; item: string; audioUrl?: string | null } | null>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,6 +52,19 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
       setTimeout(() => {
         setCurrentWinner(result);
         setDrawing(false);
+        
+        // Play audio if available
+        if (result.audioUrl) {
+          if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+          }
+          audioRef.current = new Audio(result.audioUrl);
+          audioRef.current.play().catch(err => {
+            console.error("Failed to play audio:", err);
+          });
+        }
+        
         toast.success(`${result.winner} won ${result.item}!`, {
           description: "Cooldown has been applied",
         });

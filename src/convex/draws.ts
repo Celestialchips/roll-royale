@@ -9,6 +9,7 @@ export const createSession = mutation({
       name: v.string(),
       cooldown: v.number(),
     })),
+    audioFiles: v.optional(v.record(v.string(), v.id("_storage"))),
   },
   handler: async (ctx, args) => {
     const sessionId = await ctx.db.insert("drawSessions", {
@@ -16,6 +17,7 @@ export const createSession = mutation({
       items: args.items,
       cooldowns: {},
       history: [],
+      audioFiles: args.audioFiles,
     });
 
     return sessionId;
@@ -149,7 +151,13 @@ export const performDraw = mutation({
       sessionId: args.sessionId,
     });
 
-    return { winner, item: item.name };
+    // Get audio URL if exists
+    let audioUrl = null;
+    if (session.audioFiles && session.audioFiles[winner]) {
+      audioUrl = await ctx.storage.getUrl(session.audioFiles[winner]);
+    }
+
+    return { winner, item: item.name, audioUrl };
   },
 });
 
