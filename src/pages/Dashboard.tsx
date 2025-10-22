@@ -55,10 +55,10 @@ export default function Dashboard() {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-8">
                 <h2 className="text-4xl font-bold text-white mb-2">
-                  Aree you ready to rumbleeeeee?
+                  What dropped today?
                 </h2>
                 <p className="text-white/70">
-                  Add players and items with their respective cooldowns to get started
+                  Add players and items with their respective cooldowns to roll
                 </p>
               </div>
               <SessionSetup onSessionCreated={setCurrentSession} />

@@ -18,11 +18,11 @@ interface SessionSetupProps {
 // Available audio files in the public folder
 const AUDIO_OPTIONS = [
   { value: "none", label: "No Audio" },
-  { value: "/audio/winner1.wav", label: "Winner Sound 1" },
-  { value: "/audio/winner2.wav", label: "Winner Sound 2" },
-  { value: "/audio/winner3.wav", label: "Winner Sound 3" },
-  { value: "/audio/fanfare.wav", label: "Fanfare" },
-  { value: "/audio/celebration.wav", label: "Celebration" },
+  { value: "/audio/winner1.wav", label: "Lloyd" },
+  { value: "/audio/ahfk.wav", label: "Ahhhh" },
+  { value: "/audio/fen.wav", label: "Fenny" },
+  { value: "/audio/geno.wav", label: "Genocide" },
+  { value: "/audio/park.wav", label: "Park" },
 ];
 
 export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
