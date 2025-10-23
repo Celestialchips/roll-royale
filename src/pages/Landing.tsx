@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Sparkles, Zap, Clock, Trophy, ArrowRight, History } from "lucide-react";
+import { Sparkles, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon } from "lucide-react";
 import { useNavigate } from "react-router";
 
 export default function Landing() {
@@ -31,6 +31,10 @@ export default function Landing() {
             </h1>
           </div>
           <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => window.open("https://buymeacoffee.com/ryanglassdj", "_blank")} className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10">
+              <CoffeeIcon className="h-4 w-4 mr-2" />
+              Buy me a coffee
+            </Button>
             <Button
               onClick={() => navigate("/history")}
               variant="outline"

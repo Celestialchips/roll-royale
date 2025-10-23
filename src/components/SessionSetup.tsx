@@ -19,6 +19,7 @@ interface SessionSetupProps {
 const AUDIO_OPTIONS = [
   { value: "none", label: "No Audio" },
   { value: "/audio/ahfk.wav", label: "Ahhhh" },
+  { value: "/audio/lloyd.wav", label: "Lloyd" },
   { value: "/audio/fen.wav", label: "Fenny" },
   { value: "/audio/geno.wav", label: "Genocide" },
   { value: "/audio/park.wav", label: "Park" },
