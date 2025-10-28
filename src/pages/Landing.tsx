@@ -15,8 +15,8 @@ export default function Landing() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#00ff88]/10 rounded-full blur-[100px] animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-[#0088ff]/10 rounded-full blur-[100px] animate-pulse delay-2000" />
         {/* add pumpkin and ghost gifs */}
-        <img src="/images/pumpkin.gif" alt="Pumpkin" className="absolute top-1/4 left-1/6 w-96 h-96" />
-        <img src="/images/ghost.gif" alt="Ghost" className="absolute top-1/3 right-1/6 w-96 h-96" />
+        <img src="/pumpkin.gif" alt="Pumpkin" className="absolute top-1/4 left-1/6 w-96 h-96" />
+        <img src="/ghost.gif" alt="Ghost" className="absolute top-1/3 right-1/6 w-96 h-96" />
       </div>
 
       {/* Header */}
