@@ -6,10 +6,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { motion, AnimatePresence } from "framer-motion";
-import { Loader2, Plus, Trash2, X, Sparkles, Clock, Trophy, RotateCcw } from "lucide-react";
+import { Loader2, X, Sparkles, Clock, Trophy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface NamePickerProps {
   sessionId: Id<"drawSessions">;
@@ -25,7 +26,14 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
   const [drawing, setDrawing] = useState(false);
   const [currentWinner, setCurrentWinner] = useState<{ winner: string; item: string; audioUrl?: string | null } | null>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
+  const [excludedNames, setExcludedNames] = useState<boolean[]>(session?.names.map(() => false) || []);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const handleExcludeFromDraw = (index: number, excluded: boolean) => {
+    const newExcludedNames = [...excludedNames];
+    newExcludedNames[index] = excluded;
+    setExcludedNames(newExcludedNames);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -47,7 +55,11 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
     setCurrentWinner(null);
     
     try {
-      const result = await performDraw({ sessionId, itemIndex });
+      const result = await performDraw({ 
+        sessionId, 
+        itemIndex,
+        excludedNames: excludedNames,
+      });
       
       setTimeout(() => {
         setCurrentWinner(result);
@@ -84,13 +96,18 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
     }
   };
 
+  // get available names for the draw after excluding or including names from the draw
   const getAvailableNames = () => {
-    return session.names.filter((name) => {
+    return session.names.filter((name, index) => {
+      const isExcluded = excludedNames[index];
+      if (isExcluded) {
+        return false;
+      }
       const cooldownEnd = session.cooldowns[name] || 0;
-      return cooldownEnd <= currentTime;
+      return !isExcluded && cooldownEnd <= currentTime;
     });
   };
-
+  
   const getRemainingCooldown = (name: string) => {
     const cooldownEnd = session.cooldowns[name] || 0;
     const remaining = Math.max(0, cooldownEnd - currentTime);
@@ -164,6 +181,18 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
                           {cooldown.hours}h {cooldown.minutes}m
                         </div>
                       )}
+                      {/* exclusion checkbox */}
+                      <div key={index} className="flex items-center gap-2">
+                        <Checkbox checked={
+                          excludedNames[index]} 
+                          onCheckedChange={
+                            (checked: boolean) => 
+                            handleExcludeFromDraw(index, checked)
+                            } className="border-[#00ff88]/30 hover:border-[#00ff88] hover:bg-[#00ff88]/10 h-4 w-4 mr-2" />
+                        <Label className="text-white/70 text-xs flex items-center gap-1 mb-1">
+                          {`${excludedNames[index] ? "Excluded" : "Included"} ${name} from draw (Optional)`}
+                        </Label>
+                      </div>
                     </motion.div>
                   );
                 })}

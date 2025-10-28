@@ -61,6 +61,7 @@ export const performDraw = mutation({
   args: {
     sessionId: v.id("drawSessions"),
     itemIndex: v.number(),
+    excludedNames: v.optional(v.array(v.boolean())),
   },
   handler: async (ctx, args) => {
     const session = await ctx.db.get(args.sessionId);
@@ -81,7 +82,10 @@ export const performDraw = mutation({
       .withIndex("by_itemName", (q) => q.eq("itemName", item.name))
       .collect();
 
-    const availableNames = session.names.filter((name) => {
+    const availableNames = session.names.filter((name, index) => {
+      if (args.excludedNames && args.excludedNames[index]) {
+        return false;
+      }
       // Check session cooldown
       const sessionCooldownEnd = session.cooldowns[name] || 0;
       if (sessionCooldownEnd > now) {

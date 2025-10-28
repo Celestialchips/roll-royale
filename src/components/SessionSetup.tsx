@@ -11,6 +11,7 @@ import { useMutation } from "convex/react";
 import { toast } from "sonner";
 import { Id } from "@/convex/_generated/dataModel";
 
+
 interface SessionSetupProps {
   onSessionCreated: (sessionId: Id<"drawSessions">) => void;
 }
@@ -32,7 +33,7 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
   ]);
   const [creating, setCreating] = useState(false);
   const [audioSelections, setAudioSelections] = useState<Record<string, string>>({});
-
+  const [excludeFromDraw, setExcludeFromDraw] = useState<boolean[]>([false]);
   const createSession = useMutation(api.draws.createSession);
 
   const addName = () => {
@@ -140,6 +141,7 @@ export function SessionSetup({ onSessionCreated }: SessionSetupProps) {
                     onChange={(e) => updateName(index, e.target.value)}
                     placeholder={`Name ${index + 1}`}
                     className="bg-[#0a0a0a] border-[#00ff88]/30 focus:border-[#00ff88] text-white"
+                    disabled={excludeFromDraw[index]}
                   />
                   {name.trim() && (
                     <div>

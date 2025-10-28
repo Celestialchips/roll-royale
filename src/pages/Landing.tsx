@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Sparkles, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon } from "lucide-react";
+import { Dices, Ghost, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon } from "lucide-react";
 import { useNavigate } from "react-router";
 
 export default function Landing() {
@@ -9,10 +9,14 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
       {/* Animated Background */}
+      {/* Halloween themed background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#00ff88]/10 rounded-full blur-[100px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#0088ff]/10 rounded-full blur-[100px] animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-[#ff0080]/10 rounded-full blur-[100px] animate-pulse delay-2000" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#ff0080]/10 rounded-full blur-[100px] animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#00ff88]/10 rounded-full blur-[100px] animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-[#0088ff]/10 rounded-full blur-[100px] animate-pulse delay-2000" />
+        {/* add pumpkin and ghost gifs */}
+        <img src="/images/pumpkin.gif" alt="Pumpkin" className="absolute top-1/4 left-1/6 w-96 h-96" />
+        <img src="/images/ghost.gif" alt="Ghost" className="absolute top-1/3 right-1/6 w-96 h-96" />
       </div>
 
       {/* Header */}
@@ -24,14 +28,15 @@ export default function Landing() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gradient-to-br from-[#00ff88] to-[#0088ff] rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(0,255,136,0.3)]">
-              <Sparkles className="h-6 w-6 text-black" />
+              <Dices className="h-6 w-6 text-black" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00ff88] to-[#0088ff] bg-clip-text text-transparent">
-              Delux MU Roller
+              Delux Dark Epoch: MU Roller
             </h1>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => window.open("https://buymeacoffee.com/ryanglassdj", "_blank")} className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10">
+            <Button variant="outline" onClick={() => window.open("https://buymeacoffee.com/ryanglassdj", "_blank")} 
+            className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10">
               <CoffeeIcon className="h-4 w-4 mr-2" />
               Buy me a coffee
             </Button>
@@ -63,7 +68,7 @@ export default function Landing() {
             className="mb-8 inline-block"
           >
             <div className="w-24 h-24 bg-gradient-to-br from-[#00ff88] via-[#0088ff] to-[#ff0080] rounded-2xl flex items-center justify-center shadow-[0_0_50px_rgba(0,255,136,0.4)] mx-auto">
-              <Sparkles className="h-12 w-12 text-black" />
+              <Dices className="h-12 w-12 text-black" />
             </div>
           </motion.div>
 
@@ -73,7 +78,7 @@ export default function Landing() {
             transition={{ delay: 0.2 }}
             className="text-5xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-[#00ff88] via-[#0088ff] to-[#ff0080] bg-clip-text text-transparent"
           >
-            Delux MU Random Name Picker
+            Delux Dark Epoch: MU Random Name Picker
           </motion.h1>
 
           <motion.p
@@ -194,7 +199,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/10 bg-[#111111]/50 backdrop-blur-sm py-8">
         <div className="container mx-auto px-4 text-center text-white/50">
-          <p>Built with ❤️ by Chippia for Delux Dark Epoch: MU</p>
+          <p>Built with ❤️ by Chippia from Uruk 16, Delux Dark Epoch: MU</p>
         </div>
       </footer>
     </div>

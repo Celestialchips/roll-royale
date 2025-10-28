@@ -25,7 +25,7 @@ export default function Dashboard() {
               <Sparkles className="h-6 w-6 text-black" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00ff88] to-[#0088ff] bg-clip-text text-transparent">
-              Delux MU Roller
+              Delux Dark Epoch: MU Roller
             </h1>
           </div>
           <Button
@@ -55,10 +55,10 @@ export default function Dashboard() {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-8">
                 <h2 className="text-4xl font-bold text-white mb-2">
-                  What dropped today?
+                  What Spooky Treats dropped today?
                 </h2>
                 <p className="text-white/70">
-                  Add players and items with their respective cooldowns to roll
+                  Add tricksters and treats with their respective cooldowns to roll
                 </p>
               </div>
               <SessionSetup onSessionCreated={setCurrentSession} />
