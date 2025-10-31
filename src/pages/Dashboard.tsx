@@ -3,7 +3,7 @@ import { NamePicker } from "@/components/NamePicker";
 import { SessionSetup } from "@/components/SessionSetup";
 import { Id } from "@/convex/_generated/dataModel";
 import { motion } from "framer-motion";
-import { Sparkles, History } from "lucide-react";
+import { Dices, History } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -22,10 +22,10 @@ export default function Dashboard() {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate("/")}>
             <div className="w-10 h-10 bg-gradient-to-br from-[#00ff88] to-[#0088ff] rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(0,255,136,0.3)]">
-              <Sparkles className="h-6 w-6 text-black" />
+              <Dices className="h-6 w-6 text-black" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00ff88] to-[#0088ff] bg-clip-text text-transparent">
-              Delux Dark Epoch: MU Roller
+              Roll Delux: MU
             </h1>
           </div>
           <Button
@@ -54,6 +54,10 @@ export default function Dashboard() {
           ) : (
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-8">
+                <div className="flex items-center justify-center gap-4">
+                  <img src="/ghost.gif" alt="Ghost" className="size-24 md:size-48 lg:size-64" />
+                  <img src="/pumpkin.gif" alt="Pumpkin" className="size-24 md:size-48 lg:size-64" />
+                </div>
                 <h2 className="text-4xl font-bold text-white mb-2">
                   What Spooky Treats dropped today?
                 </h2>

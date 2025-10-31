@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Dices, Ghost, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon } from "lucide-react";
+import { Dices, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon } from "lucide-react";
 import { useNavigate } from "react-router";
 
 export default function Landing() {
@@ -14,8 +14,6 @@ export default function Landing() {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#ff0080]/10 rounded-full blur-[100px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#00ff88]/10 rounded-full blur-[100px] animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-[#0088ff]/10 rounded-full blur-[100px] animate-pulse delay-2000" />
-        {/* add pumpkin and ghost gifs */}
-        <img src="/ghost.gif" alt="Ghost" className="absolute top-1/3 right-1/6 w-96 h-96" />
       </div>
 
       {/* Header */}
@@ -30,7 +28,7 @@ export default function Landing() {
               <Dices className="h-6 w-6 text-black" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00ff88] to-[#0088ff] bg-clip-text text-transparent">
-              Delux Dark Epoch: MU Roller
+              Roll Delux: MU
             </h1>
           </div>
           <div className="flex items-center gap-3">
@@ -77,7 +75,7 @@ export default function Landing() {
             transition={{ delay: 0.2 }}
             className="text-5xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-[#00ff88] via-[#0088ff] to-[#ff0080] bg-clip-text text-transparent"
           >
-            Delux Dark Epoch: MU Random Name Picker
+            Delux Dark Epoch: MU Random Name Roller
           </motion.h1>
 
           <motion.p
