@@ -6,7 +6,7 @@
   "homepage": "https://celestialchips.github.io/roll-royale",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && cp docs/index.html docs/404.html",
     "lint": "eslint .",
     "format": "prettier --write .",
     "preview": "vite preview"
