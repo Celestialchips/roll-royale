@@ -145,6 +145,10 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
           Reset Cooldowns
         </Button>
       </div>
+      <div className="flex items-center justify-center gap-4">
+        <img src="/ghost.gif" alt="Ghost" className="size-24 md:size-48 lg:size-64" />
+        <img src="/pumpkin.gif" alt="Pumpkin" className="size-24 md:size-48 lg:size-64" />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Names Panel */}
