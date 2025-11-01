@@ -1,21 +1,19 @@
-import { Button } from "@/components/ui/button";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/convex/_generated/api";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, Trophy, Sparkles, BugIcon } from "lucide-react";
+import { Clock, Trophy, Dices } from "lucide-react";
 import { useQuery } from "convex/react";
-import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
-import RequestFeatureForm from "@/components/RequestForm";
+import NavMenu from "@/components/NavMenu";
 
 
 export default function History() {
-  const navigate = useNavigate();
   const globalHistory = useQuery(api.draws.getGlobalHistory);
   const globalCooldowns = useQuery(api.draws.getGlobalCooldowns);
   const [currentTime, setCurrentTime] = useState(Date.now());
-  const [requestFeatureOpen, setRequestFeatureOpen] = useState(false);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(Date.now());
@@ -49,19 +47,7 @@ export default function History() {
             </h1>
           </div>
           <div className="flex items-center gap-3">
-          {requestFeatureOpen && <RequestFeatureForm />}
-          <Button variant="outline" onClick={() => setRequestFeatureOpen(!requestFeatureOpen)} className="border-[#ff0080]/30 hover:border-[#ff0080] hover:bg-[#ff0080]/10">
-              <BugIcon className="h-4 w-4 mr-2" />
-              Request a Feature
-            </Button>
-          <Button
-            variant="outline"
-            onClick={() => navigate("/dashboard")}
-            className="border-[#00ff88]/30 hover:border-[#00ff88] hover:bg-[#00ff88]/10"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
-          </Button>
+          <NavMenu />
           </div>
         </div>
       </motion.header>
@@ -134,7 +120,7 @@ export default function History() {
             <Card className="bg-[#111111] border-[#00ff88]/30 shadow-[0_0_15px_rgba(0,255,136,0.1)]">
               <CardHeader>
                 <CardTitle className="text-[#00ff88] flex items-center gap-2">
-                  <Sparkles className="h-5 w-5" />
+                  <Dices className="h-5 w-5" />
                   All Rolls ({globalHistory?.length || 0})
                 </CardTitle>
               </CardHeader>

@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Dices, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon, BugIcon, XIcon } from "lucide-react";
+import { Dices, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon, BugIcon, Menu } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import RequestFeatureForm from "@/components/RequestForm";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import NavMenu from "@/components/NavMenu";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -34,31 +36,8 @@ export default function Landing() {
               Roll Delux: MU
             </h1>
           </div>
-          {requestFeatureOpen && <RequestFeatureForm />}
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => setRequestFeatureOpen(!requestFeatureOpen)} className="border-[#ff0080]/30 hover:border-[#ff0080] hover:bg-[#ff0080]/10">
-              <BugIcon className="h-4 w-4 mr-2" />
-              Request a Feature
-            </Button>
-            <Button variant="outline" onClick={() => window.open("https://buymeacoffee.com/ryanglassdj", "_blank")} 
-            className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10">
-              <CoffeeIcon className="h-4 w-4 mr-2" />
-              Buy me a coffee
-            </Button>
-            <Button
-              onClick={() => navigate("/history")}
-              variant="outline"
-              className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10"
-            >
-              <History className="h-4 w-4 mr-2" />
-              Roll History
-            </Button>
-            <Button
-              onClick={() => navigate("/dashboard")}
-              className="bg-gradient-to-r from-[#00ff88] to-[#0088ff] hover:shadow-[0_0_20px_rgba(0,255,136,0.5)] transition-all"
-            >
-              Get Started
-            </Button>
+            <NavMenu />
           </div>
         </div>
       </motion.header>

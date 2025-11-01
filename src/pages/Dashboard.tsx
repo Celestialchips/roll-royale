@@ -1,17 +1,15 @@
-import { Button } from "@/components/ui/button";
 import { NamePicker } from "@/components/NamePicker";
 import { SessionSetup } from "@/components/SessionSetup";
 import { Id } from "@/convex/_generated/dataModel";
 import { motion } from "framer-motion";
-import { BugIcon, Dices, History } from "lucide-react";
+import { Dices } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import RequestFeatureForm from "@/components/RequestForm";
+import NavMenu from "@/components/NavMenu";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [currentSession, setCurrentSession] = useState<Id<"drawSessions"> | null>(null);
-  const [requestFeatureOpen, setRequestFeatureOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -30,21 +28,7 @@ export default function Dashboard() {
               Roll Delux: MU
             </h1>
           </div>
-          {requestFeatureOpen && <RequestFeatureForm />}
-          <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => setRequestFeatureOpen(!requestFeatureOpen)} className="border-[#ff0080]/30 hover:border-[#ff0080] hover:bg-[#ff0080]/10">
-              <BugIcon className="h-4 w-4 mr-2" />
-              Request a Feature
-            </Button>
-          <Button
-            variant="outline"
-            onClick={() => navigate("/history")}
-            className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10"
-          >
-            <History className="h-4 w-4 mr-2" />
-            Roll History
-          </Button>
-        </div>
+          <NavMenu />
         </div>
       </motion.header>
 
