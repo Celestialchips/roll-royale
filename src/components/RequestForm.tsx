@@ -95,7 +95,24 @@ export default function RequestFeatureForm() {
     <>
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
-        <h1>Request a Feature</h1>
+        {(formData.category === "feature" || formData.category === "") && (
+          <>
+          <h1>Request A New Feature</h1>
+          <p className="text-sm text-muted-foreground">Please enter the name of the feature you would like to request.</p>
+          </>
+        )}
+        {formData.category === "bug" && (
+          <>
+          <h1>Report A Bug??? I don't think so...</h1>
+          <p className="text-sm text-muted-foreground">Please enter the name of the bug you would like to report.</p>
+          </>
+        )}
+        {formData.category === "improvement" && (
+          <>
+          <h1>Suggest An Improvement... Sure Why Not!</h1>
+          <p className="text-sm text-muted-foreground">Please enter the name of the improvement you would like to suggest.</p>
+          </>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 mb-4">
             <Input
