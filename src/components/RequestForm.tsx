@@ -140,7 +140,7 @@ export default function RequestFeatureForm() {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex justify-end gap-4">\
+          <div className="flex justify-end gap-4">
           <Button type="button" onClick={() => setOpen(false)} className="bg-gradient-to-r from-[#8332d5] to-[#0088ff]">
               Cancel
             </Button>
