@@ -146,9 +146,12 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
         </Button>
       </div>
       <div className="flex items-center justify-center gap-4">
-        <img src="/ghost.gif" alt="Ghost" className="size-24 md:size-48 lg:size-64" />
-        <img src="/pumpkin.gif" alt="Pumpkin" className="size-24 md:size-48 lg:size-64" />
+        <img src="/turkey3.gif" alt="Turkey" className="size-24 md:size-48 lg:size-64" />
+        {/* <img src="/Turkey2.gif" alt="Turkey2" className="size-24 md:size-48 lg:size-64" /> */}
       </div>
+      <h2 className="text-4xl font-bold text-white mb-8 text-center">
+        <span className="bg-gradient-to-r from-[#00ff88] to-[#ae00ff] bg-clip-text text-transparent">WINNER WINNER WINNER TURKEY FOR DINNER!!!</span>
+      </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Names Panel */}

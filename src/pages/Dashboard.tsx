@@ -3,13 +3,15 @@ import { NamePicker } from "@/components/NamePicker";
 import { SessionSetup } from "@/components/SessionSetup";
 import { Id } from "@/convex/_generated/dataModel";
 import { motion } from "framer-motion";
-import { Dices, History } from "lucide-react";
+import { BugIcon, Dices, History } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import RequestFeatureForm from "@/components/RequestForm";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [currentSession, setCurrentSession] = useState<Id<"drawSessions"> | null>(null);
+  const [requestFeatureOpen, setRequestFeatureOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -28,6 +30,12 @@ export default function Dashboard() {
               Roll Delux: MU
             </h1>
           </div>
+          {requestFeatureOpen && <RequestFeatureForm />}
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => setRequestFeatureOpen(!requestFeatureOpen)} className="border-[#ff0080]/30 hover:border-[#ff0080] hover:bg-[#ff0080]/10">
+              <BugIcon className="h-4 w-4 mr-2" />
+              Request a Feature
+            </Button>
           <Button
             variant="outline"
             onClick={() => navigate("/history")}
@@ -36,6 +44,7 @@ export default function Dashboard() {
             <History className="h-4 w-4 mr-2" />
             Roll History
           </Button>
+        </div>
         </div>
       </motion.header>
 
@@ -55,14 +64,13 @@ export default function Dashboard() {
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-8">
                 <div className="flex items-center justify-center gap-4">
-                  <img src="/ghost.gif" alt="Ghost" className="size-24 md:size-48 lg:size-64" />
-                  <img src="/pumpkin.gif" alt="Pumpkin" className="size-24 md:size-48 lg:size-64" />
+                  <img src="/turkey2.gif" alt="Turkey" className="size-24 md:size-48 lg:size-64" />
                 </div>
                 <h2 className="text-4xl font-bold text-white mb-2">
-                  What Spooky Treats dropped today?
+                  What tasty morsels dropped today?
                 </h2>
                 <p className="text-white/70">
-                  Add tricksters and treats with their respective cooldowns to roll
+                  Add each pilgrim and their respective item cooldowns to roll
                 </p>
               </div>
               <SessionSetup onSessionCreated={setCurrentSession} />

@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Dices, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon } from "lucide-react";
+import { Dices, Zap, Clock, Trophy, ArrowRight, History, CoffeeIcon, BugIcon, XIcon } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useState } from "react";
+import RequestFeatureForm from "@/components/RequestForm";
 
 export default function Landing() {
   const navigate = useNavigate();
+  const [requestFeatureOpen, setRequestFeatureOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden">
@@ -31,7 +34,12 @@ export default function Landing() {
               Roll Delux: MU
             </h1>
           </div>
+          {requestFeatureOpen && <RequestFeatureForm />}
           <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => setRequestFeatureOpen(!requestFeatureOpen)} className="border-[#ff0080]/30 hover:border-[#ff0080] hover:bg-[#ff0080]/10">
+              <BugIcon className="h-4 w-4 mr-2" />
+              Request a Feature
+            </Button>
             <Button variant="outline" onClick={() => window.open("https://buymeacoffee.com/ryanglassdj", "_blank")} 
             className="border-[#0088ff]/30 hover:border-[#0088ff] hover:bg-[#0088ff]/10">
               <CoffeeIcon className="h-4 w-4 mr-2" />

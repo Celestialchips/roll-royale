@@ -23,6 +23,16 @@ const schema = defineSchema(
       audioSelections: v.optional(v.record(v.string(), v.string())),
     }),
 
+    // Feature requests
+    featureRequests: defineTable({
+      feature: v.string(),
+      description: v.string(),
+      priority: v.union(v.literal("low"), v.literal("medium"), v.literal("high")),
+      category: v.union(v.literal("feature"), v.literal("bug"), v.literal("improvement")),
+      createdAt: v.number(),
+    })
+    .index("by_createdAt", ["createdAt"]),
+
     // Global cooldowns tracked by item name
     globalCooldowns: defineTable({
       itemName: v.string(),
