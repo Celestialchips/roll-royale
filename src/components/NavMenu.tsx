@@ -13,34 +13,34 @@ const MENU_ITEMS = {
   feature: {
     icon: BugIcon,
     label: "Request a Feature",
-    color: "destructive",
+    color: "hover:text-destructive focus:text-destructive",
     action: "toggleFeature"
   },
   coffee: {
     icon: CoffeeIcon,
     label: "Buy me a coffee",
-    color: "[#0088ff]",
+    color: "hover:text-[#0088ff] focus:text-[#0088ff]",
     action: "openLink",
     link: "https://buymeacoffee.com/ryanglassdj"
   },
   history: {
     icon: History,
     label: "Roll History",
-    color: "[#FF5700]",
+    color: "hover:text-[#FF5700] focus:text-[#FF5700]",
     action: "navigate",
     path: "/history"
   },
   dashboard: {
     icon: ArrowRight,
     label: "Get Started",
-    color: "[#00ff88]",
+    color: "hover:text-[#00ff88] focus:text-[#00ff88]",
     action: "navigate",
     path: "/dashboard"
   },
   back: {
     icon: ArrowLeft,
     label: "Back to Dashboard",
-    color: "[#00ff88]",
+    color: "hover:text-[#00ff88] focus:text-[#00ff88]",
     action: "navigate",
     path: "/dashboard"
   }
@@ -85,7 +85,7 @@ export default function NavMenu() {
               return (
                 <DropdownMenuItem
                   key={itemKey}
-                  className={`${MENU_ITEM_CLASS} hover:text-${item.color} focus:text-${item.color}`}
+                  className={`${MENU_ITEM_CLASS} ${item.color}`}
                   onClick={() => handleAction(item)}
                 >
                   <Icon className="h-4 w-4 mr-2" />
