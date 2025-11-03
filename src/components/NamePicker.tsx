@@ -26,7 +26,10 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
   const [drawing, setDrawing] = useState(false);
   const [currentWinner, setCurrentWinner] = useState<{ winner: string; item: string; audioUrl?: string | null } | null>(null);
   const [currentTime, setCurrentTime] = useState(Date.now());
-  const [excludedNames, setExcludedNames] = useState<boolean[]>(session?.names.map(() => false) || []);
+  const [excludedNames, setExcludedNames] = useState<boolean[]>([]);
+  useEffect(() => {
+    setExcludedNames(session?.names.map(() => false) || []);
+  }, [session?.names.length]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleExcludeFromDraw = (index: number, excluded: boolean) => {
@@ -34,6 +37,7 @@ export function NamePicker({ sessionId, onBack }: NamePickerProps) {
     newExcludedNames[index] = excluded;
     setExcludedNames(newExcludedNames);
   };
+  
 
   useEffect(() => {
     const interval = setInterval(() => {
